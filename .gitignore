@@ -1,0 +1,45 @@
+# Node.js
+web/node_modules/
+web/dist/
+web/build/
+web/.env
+web/.eslintcache
+web/npm-debug.log*
+web/yarn-debug.log*
+web/yarn-error.log*
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyd
+.Python
+backend/venv/
+backend/env/
+.venv/
+env/
+venv/
+ENV/
+.env
+.env.*
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Research Assets & Large Files
+models/
+data/
+outputs/
+test_emotions.csv
+*.log
+*.sqlite3
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db

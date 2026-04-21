@@ -1,0 +1,162 @@
+@import "tailwindcss";
+
+@theme {
+  /* Design System Colors */
+  --color-background: #0e0e0e;
+  --color-surface: #0e0e0e;
+  --color-surface-dim: #0e0e0e;
+  --color-surface-bright: #2c2c2c;
+  --color-surface-variant: #262626;
+  --color-surface-container-lowest: #000000;
+  --color-surface-container-low: #131313;
+  --color-surface-container: #1a1a1a;
+  --color-surface-container-high: #20201f;
+  --color-surface-container-highest: #262626;
+  --color-surface-tint: #ba9eff;
+
+  --color-primary: #ba9eff;
+  --color-primary-dim: #8455ef;
+  --color-primary-fixed: #ae8dff;
+  --color-primary-fixed-dim: #a27cff;
+  --color-primary-container: #ae8dff;
+  --color-on-primary: #39008c;
+  --color-on-primary-fixed: #000000;
+  --color-on-primary-fixed-variant: #370086;
+  --color-on-primary-container: #2b006e;
+  --color-inverse-primary: #6e3bd7;
+
+  --color-secondary: #00d2fd;
+  --color-secondary-dim: #00c3eb;
+  --color-secondary-fixed: #79dfff;
+  --color-secondary-fixed-dim: #1cd5ff;
+  --color-secondary-container: #00677e;
+  --color-on-secondary: #004352;
+  --color-on-secondary-fixed: #003a47;
+  --color-on-secondary-fixed-variant: #00586c;
+  --color-on-secondary-container: #eefaff;
+
+  --color-tertiary: #faf9f9;
+  --color-tertiary-dim: #ebebeb;
+  --color-tertiary-fixed: #ffffff;
+  --color-tertiary-fixed-dim: #f1f0f0;
+  --color-tertiary-container: #ebebeb;
+  --color-on-tertiary: #5e5f5f;
+  --color-on-tertiary-fixed: #4f5051;
+  --color-on-tertiary-fixed-variant: #6c6d6d;
+  --color-on-tertiary-container: #565757;
+
+  --color-error: #ff6e84;
+  --color-error-dim: #d73357;
+  --color-error-container: #a70138;
+  --color-on-error: #490013;
+  --color-on-error-container: #ffb2b9;
+
+  --color-on-background: #ffffff;
+  --color-on-surface: #ffffff;
+  --color-on-surface-variant: #adaaaa;
+  --color-inverse-surface: #fcf9f8;
+  --color-inverse-on-surface: #565555;
+
+  --color-outline: #767575;
+  --color-outline-variant: #484847;
+
+  /* Font Families */
+  --font-headline: 'Manrope', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-label: 'Inter', sans-serif;
+}
+
+/* Global Styles */
+@layer base {
+  body {
+    font-family: 'Inter', sans-serif;
+    background-color: #0e0e0e;
+    color: #ffffff;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Manrope', sans-serif;
+  }
+
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  }
+}
+
+/* Custom Utilities */
+@layer utilities {
+  .font-headline {
+    font-family: 'Manrope', sans-serif;
+  }
+  .font-body {
+    font-family: 'Inter', sans-serif;
+  }
+  .font-label {
+    font-family: 'Inter', sans-serif;
+  }
+  .font-manrope {
+    font-family: 'Manrope', sans-serif;
+  }
+  .font-inter {
+    font-family: 'Inter', sans-serif;
+  }
+}
+
+/* Component Classes */
+@layer components {
+  .aurora-glow {
+    position: absolute;
+    filter: blur(120px);
+    z-index: -1;
+    border-radius: 9999px;
+    pointer-events: none;
+  }
+
+  .aurora-glow-radial {
+    background: radial-gradient(circle at 50% 50%, rgba(132, 85, 239, 0.15) 0%, rgba(0, 195, 235, 0.05) 50%, transparent 100%);
+    pointer-events: none;
+  }
+
+  .aurora-glow-linear {
+    filter: blur(40px);
+    background: linear-gradient(135deg, #8455ef 0%, #00c3eb 100%);
+    opacity: 0.08;
+    pointer-events: none;
+  }
+
+  .glass-panel {
+    backdrop-filter: blur(20px);
+    background-color: rgba(26, 26, 26, 0.6);
+  }
+
+  .chip-ignite {
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+  }
+  .chip-ignite:hover {
+    box-shadow: 0 0 15px rgba(0, 195, 235, 0.3);
+    transform: translateY(-2px);
+  }
+
+  .nav-link-active {
+    color: #a78bfa;
+    border-bottom: 2px solid #a78bfa;
+    padding-bottom: 4px;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, #8455ef, #00c3eb);
+    color: #000000;
+    font-weight: 700;
+    border-radius: 0.5rem;
+    transition: filter 0.2s ease;
+  }
+  .btn-primary:hover {
+    filter: brightness(1.25);
+  }
+
+  .bg-surface-container-low { background-color: #131313; }
+  .bg-surface-container { background-color: #1a1a1a; }
+  .bg-surface-container-high { background-color: #20201f; }
+  .bg-surface-container-highest { background-color: #262626; }
+}
