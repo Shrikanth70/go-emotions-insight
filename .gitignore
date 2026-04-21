@@ -28,7 +28,10 @@ htmlcov/
 
 # Research Assets & Large Files
 models/
-data/
+data/*
+!data/processed/
+data/processed/*
+!data/processed/taxonomy_matrix.json
 outputs/
 test_emotions.csv
 *.log

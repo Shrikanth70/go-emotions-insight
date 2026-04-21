@@ -21,14 +21,14 @@ export default function Footer() {
             <span className="text-neutral-300 font-bold text-xs uppercase tracking-widest mb-2">
               Resources
             </span>
-            <Link to="#" className="font-body text-sm text-neutral-500 hover:text-violet-300 transition-all">
+            <Link to="https://github.com/google-research/google-research/tree/master/goemotions" className="font-body text-sm text-neutral-500 hover:text-violet-300 transition-all">
               Dataset Overview
             </Link>
-            <Link to="#" className="font-body text-sm text-neutral-500 hover:text-violet-300 transition-all">
+            <Link to="https://arxiv.org/pdf/1907.11692" className="font-body text-sm text-neutral-500 hover:text-violet-300 transition-all">
               Model Info
             </Link>
           </div>
-          <div className="flex flex-col space-y-2">
+          {/* <div className="flex flex-col space-y-2">
             <span className="text-neutral-300 font-bold text-xs uppercase tracking-widest mb-2">
               Company
             </span>
@@ -38,7 +38,7 @@ export default function Footer() {
             <Link to="#" className="font-body text-sm text-neutral-500 hover:text-violet-300 transition-all">
               Privacy Policy
             </Link>
-          </div>
+          </div> */}
         </div>
 
         {/* Social / Copyright */}

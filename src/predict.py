@@ -2,7 +2,7 @@ import os
 import joblib
 import torch
 import numpy as np
-from transformers import DistilBertTokenizer, DistilBertForSequenceClassification
+from transformers import RobertaTokenizer, RobertaForSequenceClassification
 from src.utils import SAVED_MODELS_DIR, EMOTION_LABELS
 
 class GoEmotionsPredictor:
@@ -26,11 +26,11 @@ class GoEmotionsPredictor:
         self.vectorizer = joblib.load(path / "vectorizer.joblib")
 
     def _load_transformer(self):
-        path = SAVED_MODELS_DIR / "fine_tuned_distilbert"
+        path = SAVED_MODELS_DIR / "fine_tuned_roberta"
         if not path.exists():
              raise FileNotFoundError(f"Transformer model not found at {path}")
-        self.model = DistilBertForSequenceClassification.from_pretrained(path)
-        self.tokenizer = DistilBertTokenizer.from_pretrained(path)
+        self.model = RobertaForSequenceClassification.from_pretrained(path)
+        self.tokenizer = RobertaTokenizer.from_pretrained(path)
         self.model.eval()
 
     def predict(self, texts):

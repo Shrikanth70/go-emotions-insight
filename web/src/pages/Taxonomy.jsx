@@ -1,6 +1,16 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
+import { 
+  Search, 
+  ArrowUpDown, 
+  ChevronRight, 
+  Info, 
+  Database, 
+  Brain, 
+  Sparkles,
+  Network
+} from 'lucide-react'
 import { 
   EMOTION_METADATA, 
   POSITIVE_EMOTIONS, 
@@ -36,7 +46,112 @@ export default function Taxonomy() {
     return EMOTION_METADATA[key] || { emoji: '❓', color: 'text-outline-variant' }
   }
 
-  const EmotionCard = ({ label, showFrequency }) => {
+  // Co-occurrence Heatmap Component for Technical Deep Dive
+const CoOccurrenceHeatmap = () => {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [hovered, setHovered] = useState(null);
+
+  useEffect(() => {
+    fetch('http://localhost:8000/taxonomy/matrix')
+      .then(res => res.json())
+      .then(json => {
+        setData(json);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error("Failed to fetch matrix:", err);
+        setLoading(false);
+      });
+  }, []);
+
+  if (loading) return (
+    <div className="aspect-square flex flex-col items-center justify-center text-primary font-mono text-xs gap-4">
+      <div className="w-12 h-12 border-4 border-primary/20 border-t-primary rounded-full animate-spin"></div>
+      SYNCING NEURAL NETWORK...
+    </div>
+  );
+  
+  if (!data) return (
+    <div className="aspect-square flex items-center justify-center text-error font-mono text-xs border border-error/20 rounded-2xl">
+      DATA STREAM INTERRUPTED
+    </div>
+  );
+
+  const { labels, matrix } = data;
+  const size = labels.length;
+  const maxVal = Math.max(...matrix.flat().filter((v, idx) => {
+      // Exclude diagonal for color scaling scale? Or keep it.
+      // Usually diagonal is much larger. Let's exclude it to see others better.
+      const rowIdx = Math.floor(idx / size);
+      const colIdx = idx % size;
+      return rowIdx !== colIdx;
+  }));
+
+  return (
+    <div className="relative">
+      <div 
+        className="grid gap-px bg-outline-variant/10 p-1 rounded-xl overflow-hidden"
+        style={{ 
+          gridTemplateColumns: `repeat(${size}, 1fr)`,
+          aspectRatio: '1/1'
+        }}
+      >
+        {matrix.map((row, i) => (
+          row.map((val, j) => {
+            const isDiagonal = i === j;
+            const intensity = val > 0 ? (Math.log(val + 1) / Math.log(maxVal + (isDiagonal ? val : 1))) : 0;
+            return (
+              <div 
+                key={`${i}-${j}`}
+                className="w-full h-full relative group/cell cursor-crosshair transition-all duration-300 hover:z-10 hover:scale-125 hover:shadow-xl"
+                style={{ 
+                  backgroundColor: isDiagonal ? 'rgba(124, 58, 237, 0.1)' : `rgba(124, 58, 237, ${Math.min(intensity * 1.5, 1)})`,
+                  borderRadius: val > 0 ? '1px' : '0'
+                }}
+                onMouseEnter={() => setHovered({ i, j, val })}
+                onMouseLeave={() => setHovered(null)}
+              >
+                <div className="absolute inset-0 bg-white/20 opacity-0 group-hover/cell:opacity-100 transition-opacity"></div>
+              </div>
+            );
+          })
+        ))}
+      </div>
+      
+      {/* Dynamic Tooltip */}
+      {hovered && (
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-4 bg-surface-container-highest/95 backdrop-blur-xl rounded-2xl border border-outline-variant/30 shadow-[0_0_50px_rgba(0,0,0,0.5)] z-[100] pointer-events-none min-w-[220px] animate-in fade-in zoom-in duration-300">
+          <div className="text-[10px] text-primary font-black uppercase tracking-[0.2em] mb-3 pb-2 border-b border-outline-variant/20">Label Connection Analysis</div>
+          <div className="flex flex-col gap-1">
+            <div className="flex justify-between items-center bg-surface-container-low/50 p-2 rounded-lg">
+                <span className="text-[10px] text-on-surface-variant uppercase">Source</span>
+                <span className="text-xs font-bold text-on-surface">{labels[hovered.i].toUpperCase()}</span>
+            </div>
+            <div className="flex justify-center -my-1 relative z-10">
+                <div className="bg-primary p-1 rounded-full text-on-primary">
+                    <ChevronRight className="w-3 h-3 rotate-90" />
+                </div>
+            </div>
+            <div className="flex justify-between items-center bg-surface-container-low/50 p-2 rounded-lg">
+                <span className="text-[10px] text-on-surface-variant uppercase">Target</span>
+                <span className="text-xs font-bold text-on-surface">{labels[hovered.j].toUpperCase()}</span>
+            </div>
+          </div>
+          <div className="flex justify-between items-end pt-4 mt-2">
+            <div className="flex flex-col">
+                <span className="text-[9px] text-on-surface-variant uppercase font-bold">Co-occurrences</span>
+                <span className="text-2xl font-mono font-black text-secondary leading-tight">{hovered.val.toLocaleString()}</span>
+            </div>
+            <Database className="w-6 h-6 text-primary opacity-20" />
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+const EmotionCard = ({ label, showFrequency }) => {
     const meta = getMetadata(label)
     const freq = EMOTION_FREQUENCIES[label] || 0
     
@@ -234,12 +349,15 @@ export default function Taxonomy() {
           <div className="lg:col-span-5">
             <div className="relative group">
               <div className="absolute -inset-4 bg-gradient-to-br from-primary/20 to-secondary/20 blur-2xl opacity-50 group-hover:opacity-80 transition-opacity duration-500"></div>
-              <div className="relative bg-surface-container-highest p-1 rounded-3xl overflow-hidden shadow-2xl">
-                <img
-                  alt="Abstract cosmic nebulae with glowing violet and cyan particles representing digital consciousness"
-                  className="rounded-[22px] w-full aspect-square object-cover grayscale contrast-125 opacity-70 mix-blend-screen group-hover:scale-110 transition-transform duration-700"
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuC18SdNIEPC2nfjwrDU5osQx9Ia1JUim3-l7U2ve0wCUl6VnbbkKgfv3QgEog14rhLnCPnQ6ZuSPCxzP96ihEBdWQpnh-cCLZbbK7qYAsX1w8zsnn4aHe6mvLGKdhN42v0oz3a1LtYMDRF7daq9sFJRgAnKDvXkrqpRvHbTimgstyptvNDgJi-mmi7kb3R_WDPS_T6tAwp-PPmckOQuhYClc01U1eD7u2XxRiDa_jER_u6QfNbM2zqXE4sIAPMDwf7is-yUVQ8u4PQ"
-                />
+              <div className="relative bg-surface-container-highest p-4 rounded-3xl overflow-hidden shadow-2xl border border-outline-variant/10">
+                <h4 className="text-sm font-bold text-primary mb-4 flex items-center gap-2">
+                  <Network className="w-4 h-4" />
+                  CO-OCCURRENCE MATRIX
+                </h4>
+                <CoOccurrenceHeatmap />
+                <p className="text-[10px] text-on-surface-variant/60 mt-4 text-center italic">
+                  *Normalized visualization of label correlations in the GoEmotions dataset.
+                </p>
               </div>
             </div>
           </div>

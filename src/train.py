@@ -7,8 +7,8 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.multiclass import OneVsRestClassifier
 from sklearn.linear_model import LogisticRegression
 from transformers import (
-    DistilBertTokenizer, 
-    DistilBertForSequenceClassification, 
+    RobertaTokenizer, 
+    RobertaForSequenceClassification, 
     Trainer, 
     TrainingArguments
 )
@@ -61,12 +61,12 @@ class GoEmotionsDataset(Dataset):
             'labels': torch.FloatTensor(label)
         }
 
-def train_transformer(X_train, y_train, X_val=None, y_val=None, model_name='distilbert-base-uncased', epochs=1):
+def train_transformer(X_train, y_train, X_val=None, y_val=None, model_name='roberta-base', epochs=1):
     """
-    Fine-tune a DistilBERT model.
+    Fine-tune a RoBERTa model.
     """
-    tokenizer = DistilBertTokenizer.from_pretrained(model_name)
-    model = DistilBertForSequenceClassification.from_pretrained(
+    tokenizer = RobertaTokenizer.from_pretrained(model_name)
+    model = RobertaForSequenceClassification.from_pretrained(
         model_name, 
         num_labels=len(EMOTION_LABELS), 
         problem_type="multi_label_classification"
@@ -75,7 +75,7 @@ def train_transformer(X_train, y_train, X_val=None, y_val=None, model_name='dist
     train_dataset = GoEmotionsDataset(X_train, y_train, tokenizer)
     eval_dataset = GoEmotionsDataset(X_val, y_val, tokenizer) if X_val is not None else None
 
-    output_dir = SAVED_MODELS_DIR / "fine_tuned_distilbert"
+    output_dir = SAVED_MODELS_DIR / "fine_tuned_roberta"
     
     training_args = TrainingArguments(
         output_dir=str(output_dir),
@@ -111,7 +111,7 @@ def save_baseline(model, vectorizer, name="baseline_logreg"):
     joblib.dump(vectorizer, path / "vectorizer.joblib")
     print(f"Baseline saved to {path}")
 
-def save_transformer(model, tokenizer, name="fine_tuned_distilbert"):
+def save_transformer(model, tokenizer, name="fine_tuned_roberta"):
     """Save transformer artifacts."""
     path = SAVED_MODELS_DIR / name
     path.mkdir(parents=True, exist_ok=True)

@@ -88,6 +88,20 @@ async def predict_csv(file: UploadFile = File(...)):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+@app.get("/taxonomy/matrix")
+async def get_taxonomy_matrix():
+    """Return the pre-calculated co-occurrence matrix for the taxonomy visualization."""
+    from src.utils import PROCESSED_DATA_DIR
+    import json
+    
+    matrix_path = PROCESSED_DATA_DIR / "taxonomy_matrix.json"
+    if not matrix_path.exists():
+        raise HTTPException(status_code=404, detail="Taxonomy data not found. Please run data generation script.")
+    
+    with open(matrix_path, "r") as f:
+        data = json.load(f)
+    return data
+
 # Ensure Torch is available for health check
 import torch
 

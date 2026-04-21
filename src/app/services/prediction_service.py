@@ -21,8 +21,8 @@ class PredictionService:
             self.baseline_predictor = GoEmotionsPredictor(model_type="baseline")
         
         # Transformer
-        if (SAVED_MODELS_DIR / "fine_tuned_distilbert").exists():
-            print("Loading SOTA Transformer (DistilBERT)...")
+        if (SAVED_MODELS_DIR / "fine_tuned_roberta").exists():
+            print("Loading SOTA Transformer (RoBERTa)...")
             self.transformer_predictor = GoEmotionsPredictor(model_type="transformer")
         else:
             print("Warning: Fine-tuned transformer not found. Batch processing might be limited.")
