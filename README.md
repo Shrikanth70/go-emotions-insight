@@ -88,16 +88,6 @@ This repository contains a full suite of materials for paper submission and pres
 - **Presentation**: [PPT_CONTENT.md](presentation/PPT_CONTENT.md) | [SPEAKER_NOTES.md](presentation/SPEAKER_NOTES.md)
 - **Guides**: [BEGINNER_GUIDE.md](docs/BEGINNER_GUIDE.md) | [REPRODUCIBILITY_GUIDE.md](docs/REPRODUCIBILITY_GUIDE.md)
 
----
-
-## 👥 Contributors
-
-Thanks to all contributors who have helped shape this project!
-
-| Avatar | Name | GitHub |
-|--------|------|--------|
-| <img src="https://github.com/Shrikanth70.png" width="50" height="50" style="border-radius:50%"> | Shrikanth70 | [@Shrikanth70](https://github.com/Shrikanth70) |
-| <img src="https://github.com/srikanth5.png" width="50" height="50" style="border-radius:50%"> | srikanth5 | [@srikanth5](https://github.com/srikanth5) |
 
 ---
 
